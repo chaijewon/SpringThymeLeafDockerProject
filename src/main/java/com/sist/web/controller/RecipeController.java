@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.sist.web.entity.Chef;
 import com.sist.web.entity.Recipe;
 import com.sist.web.service.RecipeService;
 
@@ -61,12 +62,26 @@ public class RecipeController {
 	   if(page==null)
 		   page="1";
 	   List<Recipe> list=rService.recipeListData(Integer.parseInt(page));
-	   int[] pages=rService.getPageData(Integer.parseInt(page));
+	   int[] pages=rService.getPageData(Integer.parseInt(page),12);
 	   model.addAttribute("pages", pages);
 	   model.addAttribute("list", list);
 	   // <th:block th:include="${main_html}"></th:block>
 	   // templates/main/home.html
 	   model.addAttribute("main_html", "main/home");
+	   return "main/main";
+   }
+   @GetMapping("/recipe/chef_list")
+   public String recipe_chef(@RequestParam(value="page",required = false) String page,Model model)
+   {
+	   if(page==null)
+		   page="1";
+	   List<Chef> list=rService.chefListData(Integer.parseInt(page));
+	   int[] pages=rService.getPageData(Integer.parseInt(page),20);
+	   model.addAttribute("pages", pages);
+	   model.addAttribute("list", list);
+	   // <th:block th:include="${main_html}"></th:block>
+	   // templates/main/home.html
+	   model.addAttribute("main_html", "recipe/chef");
 	   return "main/main";
    }
 }
