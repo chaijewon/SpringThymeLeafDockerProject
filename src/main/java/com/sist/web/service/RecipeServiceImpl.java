@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 public class RecipeServiceImpl implements RecipeService{
     private final RecipeRepository rDao;
     private final ChefRepository cDao;
+    private final RecipeDetailRepsitory rdDao;
 
 	@Override
 	public List<Recipe> findByTitleContains(String title,int page) {
@@ -136,6 +137,12 @@ public class RecipeServiceImpl implements RecipeService{
 	public int recipeCount() {
 		// TODO Auto-generated method stub
 		return rDao.recipeCount();
+	}
+
+	@Override
+	public RecipeDetail findByNo(int no) {
+		// TODO Auto-generated method stub
+		return rdDao.findByNo(no);
 	}
     
 }

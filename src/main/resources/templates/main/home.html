@@ -22,7 +22,7 @@ p {
     </div>
     <div class="row" style="margin-top: 10px">
       <div class="col-sm-3" th:each="vo:${list}">
-        <a href="#">
+        <a th:href="@{/recipe/detail(no=${vo.no})}">
           <div class="thumbnail">
             <img th:src="${vo.poster}" 
                  th:title="${vo.title}"
