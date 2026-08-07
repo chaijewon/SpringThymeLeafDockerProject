@@ -27,7 +27,7 @@ const chef_name='[[${chef}]]'
  <div class="container">
     <div class="row">
       <div class="col-sm-3" v-for="(vo,index) in find_list" :key="index">
-        <a href="#">
+        <a class="a-link" @click="change(vo.no)">
           <div class="thumbnail">
             <img :src="vo.poster" 
                  :title="vo.title"
@@ -105,6 +105,9 @@ const chef_name='[[${chef}]]'
     		move(page){
     			this.curpage=page
     			this.dataRecv()
+    		},
+    		change(no){
+    			location.href="/recipe/detail?no="+no
     		}
     	},
     	components:{

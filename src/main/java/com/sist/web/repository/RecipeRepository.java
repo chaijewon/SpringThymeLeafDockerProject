@@ -50,7 +50,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
     		WHERE no IN(SELECT no FROM recipe
     		            INTERSECT
     		            SELECT no FROM recipedetail)
-    		ORDER BY no ASC
+    		ORDER BY no DESC
     		OFFSET :start ROWS FETCH NEXT 12 ROWS ONLY
     	    """,nativeQuery = true
     	  )
