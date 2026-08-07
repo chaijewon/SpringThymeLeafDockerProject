@@ -43,6 +43,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
      *   count()
      *   save() / delete()
      */
+    
     @Query(
     		value="""
     		SELECT *
