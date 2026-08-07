@@ -3,8 +3,120 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<style type="text/css">
+.row {
+   margin: 0px auto;
+   width: 960px;
+}
+p {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.a-link{
+  cursor: pointer;
+}
+</style>
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+const chef_name='[[${chef}]]'
+</script>
 </head>
 <body>
-
+ <div class="container">
+    <div class="row">
+      <div class="col-sm-3" v-for="(vo,index) in find_list" :key="index">
+        <a href="#">
+          <div class="thumbnail">
+            <img :src="vo.poster" 
+                 :title="vo.title"
+                 style="width: 250px;height: 150px">
+            <p>{{vo.chef}}</p>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="row text-center" style="margin-top: 20px">
+      <ul class="pagination">
+        <li v-if="startPage>1"><a class="a-link" @click="move(startPage-1)">&laquo;</a></li>
+        
+        <li v-for="i in range(startPage,endPage)"
+            :class="i==curpage?'active':''"
+        ><a class="a-link" @click="move(i)">{{i}}</a></li>
+        
+        <li v-if="endPage<totalpage"><a class="a-link" @click="move(endPage+1)">&raquo;</a></li>
+      </ul>
+    </div>
+  </div>
+  <script>
+    let findApp=Vue.createApp({
+    	data(){
+    		return {
+    			find_list:[],
+    			curpage:1,
+    			totalpage:0,
+    			startPage:0,
+    			endPage:0,
+    		    chef:chef_name
+    		}
+    	},
+    	mounted(){
+    		// 시작과 동시에 처리 
+    		this.dataRecv()
+    	},
+    	methods:{
+    		// 사용자 정의 함수 => 이벤트 
+    		async dataRecv(){
+    			await axios.get('http://localhost:8080/recipe/recipe_chef_vue',{
+    				params:{
+    					page:this.curpage,
+    					chef:this.chef
+    				}
+    			}).then(response=>{
+    				console.log(response.data)
+    				// response.data => list:[],pages:[]
+    				this.find_list=response.data.list
+    				this.curpage=response.data.pages[0]
+    				this.totalpage=response.data.pages[1]
+    				this.startPage=response.data.pages[2]
+    				this.endPage=response.data.pages[3]
+    			})
+    		},
+    		range(start,end){
+    			let arr=[]
+    			let len=end-start
+    			for(let i=0;i<=len;i++)
+    			{
+    				arr[i]=start
+    				start++
+    			}
+    			return arr
+    		},
+    		find(){
+    			if(!this.fd) // 입력이 없는 경우
+    			{
+    				this.$refs.fdRef.focus()
+    				return
+    			}
+    			this.curpage=1
+    			this.dataRecv()
+    		},
+    		move(page){
+    			this.curpage=page
+    			this.dataRecv()
+    		}
+    	},
+    	components:{
+    		// 화면 => 분리 => 조립 
+    	},
+    	computed:{
+    		// 완성 계산 => 1,000 
+    	},
+    	watch:{
+    		// 컴포넌트에서 발생된 이벤트 감지 
+    	}
+    }).mount(".container")
+  </script>
 </body>
 </html>

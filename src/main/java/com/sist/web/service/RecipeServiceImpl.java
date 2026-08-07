@@ -64,29 +64,8 @@ public class RecipeServiceImpl implements RecipeService{
 	@Override
 	public List<Recipe> recipeListData(int page) {
 		// TODO Auto-generated method stub
-		// Pageable => 페이지 요청 정보 
-		// 페이지 번호 / 페이지 크기 , 정렬 조건 
-		Pageable pg=PageRequest.of(page-1,12,
-				Sort.by(Sort.Direction.ASC,"no"));
-		/*
-		 *   실제 SQL문장 
-		 *   SELECT *
-		 *   FROM recipe 
-		 *   ORDER BY no ASC 
-		 *   OFFSET ? ROWS FETCH NEXT ? ROWS ONLY
-		 *         --- 0번 시작 
-		 *   JPA => 중심이 객체 단위로 사용 
-		 *               -------- @Entity
-		 *          객체 ===== Column (메소드) = ORM 
-		 *          => LinQ (c#)
-		 */
-		Page<Recipe> pList=rDao.findAll(pg);
-		List<Recipe> list=new ArrayList<Recipe>();
-		// Page => List변환 
-		if(pList!=null && pList.hasContent()) // 값이 존재
-		{
-			list=pList.getContent();
-		}
+		int start=(page*12)-12;
+		List<Recipe> list=rDao.recipeListData(start);
 		return list;
 	}
 
@@ -151,6 +130,12 @@ public class RecipeServiceImpl implements RecipeService{
 		
 		return pages;
 		
+	}
+
+	@Override
+	public int recipeCount() {
+		// TODO Auto-generated method stub
+		return rDao.recipeCount();
 	}
     
 }

@@ -36,4 +36,25 @@ public class RecipeRestController {
        }
 	   return ResponseEntity.ok(map);
    }
+   @RequestMapping("/recipe/recipe_chef_vue")
+   // 반드시 비동기 
+   public ResponseEntity<Map> recipe_chef(
+      @RequestParam("page") int page,
+      @RequestParam("chef") String chef
+   )
+   {   Map map=new HashMap();
+       try
+       {
+    	   List<Recipe> list=
+    			   rService.findByChefContains(chef, page);
+    	   int[] pages=rService.getPageDataFind(2, page, 12, chef);
+    	   
+    	   map.put("list", list);
+    	   map.put("pages", pages);
+       }catch(Exception ex)
+       {
+    	   return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+       }
+	   return ResponseEntity.ok(map);
+   }
 }
