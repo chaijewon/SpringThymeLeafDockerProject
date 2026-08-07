@@ -84,6 +84,18 @@ public class RecipeController {
 	   model.addAttribute("main_html", "recipe/chef");
 	   return "main/main";
    }
+   @GetMapping("/recipe/find")
+   public String recipe_find(Model model)
+   {
+	   model.addAttribute("main_html", "recipe/find");
+	   return "main/main";
+   }
+   @GetMapping("/recipe/chef_recipe")
+   public String chef_recipe(Model model)
+   {
+	   model.addAttribute("main_html", "recipe/chef_recipe");
+	   return "main/main";
+   }
 }
 
 

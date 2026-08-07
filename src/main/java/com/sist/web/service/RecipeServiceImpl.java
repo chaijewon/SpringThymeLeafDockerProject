@@ -17,17 +17,50 @@ public class RecipeServiceImpl implements RecipeService{
     private final ChefRepository cDao;
 
 	@Override
-	public List<Recipe> findByTitleContains(String title) {
+	public List<Recipe> findByTitleContains(String title,int page) {
 		// TODO Auto-generated method stub
-		return rDao.findByTitleContains(title);
+		final int ROWSIZE=12;
+		Pageable pg=PageRequest.of(page-1, ROWSIZE,
+				Sort.by(Sort.Direction.ASC,"no"));
+		/*
+	     *   SELECT * 
+	     *   FROM recipe
+	     *   WHERE title LIKE '%데이터%'
+	     *   ORDER BY no ASC
+	     *   OFFSET ? ROWS FETCH NEXT ? ROWS ONLY
+         */
+		Page<Recipe> pList=rDao.findByTitleContains(title,pg);
+		List<Recipe> list=new ArrayList<Recipe>();
+		if(pList!=null && pList.hasContent())
+		{
+			list=pList.getContent();
+		}
+		return list;
 	}
 
 	@Override
-	public List<Recipe> findByChefContains(String chef) {
+	public List<Recipe> findByChefContains(String chef,int page) {
 		// TODO Auto-generated method stub
-		return rDao.findByChefContains(chef);
+		final int ROWSIZE=12;
+		Pageable pg=PageRequest.of(page-1, ROWSIZE,
+				Sort.by(Sort.Direction.ASC,"no"));
+		/*
+		
+	     *   SELECT * 
+	     *   FROM recipe
+	     *   WHERE title LIKE '%데이터%'
+	     *   ORDER BY no ASC
+	     *   OFFSET ? ROWS FETCH NEXT ? ROWS ONLY
+         */
+		Page<Recipe> pList=rDao.findByChefContains(chef,pg);
+		List<Recipe> list=new ArrayList<Recipe>();
+		if(pList!=null && pList.hasContent())
+		{
+			list=pList.getContent();
+		}
+		return list;
 	}
-
+    
 	@Override
 	public List<Recipe> recipeListData(int page) {
 		// TODO Auto-generated method stub
@@ -94,6 +127,30 @@ public class RecipeServiceImpl implements RecipeService{
 			list=pList.getContent();
 		}
 		return list;
+	}
+
+	@Override
+	public int[] getPageDataFind(int mode,int page, int rowsize,String fd) {
+		// TODO Auto-generated method stub
+		int count=0;
+		if(mode==1)
+		{
+			count=(int)rDao.countByTitleContains(fd);
+		}
+		else
+		{
+			count=(int)rDao.countByChefContains(fd);
+		}
+		
+		int totalpage=(int)(Math.ceil(count/12.0));
+		int startPage=((page-1)/10*10)+1;
+		int endPage=((page-1)/10*10)+10;
+		if(endPage>totalpage)
+			endPage=totalpage;
+		int[] pages= {page,totalpage,startPage,endPage};
+		
+		return pages;
+		
 	}
     
 }
