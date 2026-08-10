@@ -74,7 +74,7 @@ public class DataBoardController {
 	   List<MultipartFile> files=vo.getFiles();
 	   String filename=""; // a.jpg,b.jpg...
 	   String filesize="";
-	   boolean bCheck=false;// 파일 구분 
+	   boolean bCheck=false;// 파일 구분 //
 	   for(MultipartFile file:files)
 	   {
 		   if(file.isEmpty())
