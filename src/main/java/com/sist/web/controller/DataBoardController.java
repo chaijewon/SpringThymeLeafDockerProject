@@ -59,10 +59,17 @@ public class DataBoardController {
    {
 	   String uploadDir=request.getServletContext()
 			                   .getRealPath("/upload");
+	   System.out.println(uploadDir);
+	   // C:\\Users\\sist\\AppData\\Local\\Temp\\tomcat-docbase.8080.6744220911720755851\\upload
+	   // /home/sist/ 
 	   File dir=new File(uploadDir);
 	   if(!dir.exists())
 	   {
 		   dir.mkdirs();
+		   /*
+		    *   new File("upload") => mkdir
+		    *   new File("/upload/image") ==> mkdirs
+		    */
 	   }
 	   List<MultipartFile> files=vo.getFiles();
 	   String filename=""; // a.jpg,b.jpg...
@@ -91,24 +98,29 @@ public class DataBoardController {
 				   while(f.exists())
 				   {
 					   String newName=name+"("+count+")"+ext;
-					   f=new File(uploadDir+"/"+newName);
+					   f=new File(uploadDir,newName);
 					   count++;
 				   }
 				   
 			   }
+			   
+			   // Upload 
+			   // Paths.get => 운영체제 => \ / 
+			   Path path=Paths.get(uploadDir,f.getName());
+			   Files.copy(file.getInputStream(), path);
 			   filename+=f.getName()+",";
 			   filesize+=f.length()+",";
 			   bCheck=true;
-			   // Upload 
-			   Path path=Paths.get(uploadDir,f.getName());
-			   Files.copy(file.getInputStream(), path);
 		   }
 	   }
 	   
 	   //DB처리 
 	   if(bCheck==true)
 	   {
-		   
+		   filename=filename.substring(0,filename.lastIndexOf(","));
+		   filesize=filesize.substring(0,filesize.lastIndexOf(","));
+		   vo.setFilename(filename);
+		   vo.setFilesize(filesize);
 		   vo.setFilecount(files.size());
 	   }
 	   else
@@ -117,6 +129,7 @@ public class DataBoardController {
 		   vo.setFilesize("");
 		   vo.setFilecount(0);
 	   }
+	   dService.databoardInsert(vo);
 			   // => application.getReal()
 	   return "redirect:/databoard/list";
    }
