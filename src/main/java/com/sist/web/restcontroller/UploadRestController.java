@@ -57,11 +57,14 @@ public class UploadRestController {
 		@RequestParam(value="files",required = false) List<MultipartFile> files)
    throws Exception
    {
+	   if (files == null || files.isEmpty()) {
+	        return "파일이 존재하지 않습니다!!";
+	   }
 	   for(MultipartFile file:files)
 	   {
 		   if(file.isEmpty())
 		   {
-			   return "파일이 존재하지 않습니다!!";
+			   continue;
 		   }
 		   else
 		   {
