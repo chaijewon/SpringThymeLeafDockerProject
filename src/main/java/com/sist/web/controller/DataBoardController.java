@@ -71,6 +71,7 @@ public class DataBoardController {
 		    *   new File("/upload/image") ==> mkdirs
 		    */
 	   }
+	   
 	   List<MultipartFile> files=vo.getFiles();
 	   String filename=""; // a.jpg,b.jpg...
 	   String filesize="";
