@@ -91,6 +91,9 @@ public class RecipeController {
 	   return "main/main";
    }
    // recipe
+   
+   
+   
    @GetMapping("/recipe/find")
    public String recipe_find(Model model)
    {
