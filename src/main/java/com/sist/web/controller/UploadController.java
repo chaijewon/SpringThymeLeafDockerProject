@@ -9,4 +9,8 @@ public class UploadController {
    public String upload_page() {
 	   return "upload";
    }
+   @GetMapping("/upload2")
+   public String upload2_page() {
+	   return "upload2";
+   }
 }
